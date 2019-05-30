@@ -9,6 +9,21 @@
 int main(void)
 {
     // Your code here
+    int x = 100;
+
+    int frk = fork();
+
+    if(frk < 0){
+        fprintf(stderr, "Fork failure.");
+    } else if(frk == 0) {
+        printf("child x = %d (ID: %d) \n", x, (int) getpid(), frk);
+        x++;
+        printf("child x changed = %d\n", x);
+    } else {
+        printf("parent %d of child %d | x is = %d\n", (int) getpid(), frk, x);
+        x--;
+        printf("parent %d of child %d | x changed is = %d\n", (int) getpid(), frk, x);
+    }
 
     return 0;
 }
