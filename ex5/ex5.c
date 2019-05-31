@@ -16,7 +16,36 @@ char* msg3 = "hello world #3";
 
 int main(void)
 {
-    // Your code here
+
+    char buffer[MSGSIZE];
+    int p[2];
+
+    if (pipe(p) < 0) {
+        fprintf(stderr, "pipe failure\n");
+        exit(1);
+    }
+    
+    int frk = fork();
+    if(frk < 0) {
+        fprintf(stderr, "Fork failure :O\n");
+        exit(2);
+    } else if (frk == 0){
+        printf("child write\n");
+        write(p[1], msg1, MSGSIZE);
+        write(p[1], msg2, MSGSIZE);
+        write(p[1], msg3, MSGSIZE);
+    }
+    
+    else {
+        int wait = waitpid(frk, NULL, 0);
+        close(p[1]);
+        printf("parent read\n");
+        while(read(p[0], buffer, MSGSIZE > 0)) {
+            printf("%s\n", buffer);
+        }
+
+        printf("Reading finished.\n");
+    }
     
     return 0;
 }

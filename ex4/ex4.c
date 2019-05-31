@@ -10,7 +10,20 @@
 
 int main(void)
 {
-    // Your code here    
+    printf("parent begin\n");
+    int frk = fork();
+
+    if (frk < 0) {
+        fprintf(stderr, "fork failure\n");
+        exit(1);
+    } else if (frk == 0) {
+        printf("child\n");
+
+        execlp("ls", "ls", "-l", (char *) NULL);
+
+    } else {
+        int wait = waitpid(frk, NULL, 0);
+    }
 
     return 0;
 }
